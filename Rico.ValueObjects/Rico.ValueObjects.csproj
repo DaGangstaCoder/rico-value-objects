@@ -10,7 +10,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <PackageId>DaGangstaCoder.Rico.ValueObjects</PackageId>
-    <Version>0.0.1</Version>
+    <Version>0.0.2</Version>
     <Authors>Georgi Kirilov</Authors>
     <Description>A library that simplifies creating and managing value objects.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -19,7 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="./README.md" Pack="true" PackagePath="/"/>
+    <None Include="../README.md" Pack="true" PackagePath="/"/>
   </ItemGroup>
 
   <ItemGroup>
