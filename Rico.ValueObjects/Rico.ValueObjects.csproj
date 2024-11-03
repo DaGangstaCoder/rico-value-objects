@@ -15,7 +15,7 @@
     <Description>A library that simplifies creating and managing value objects.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/georgy-kirilov/rico-value-objects</RepositoryUrl>
-    <PackageReadmeFile>../README.md</PackageReadmeFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
