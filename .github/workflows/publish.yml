@@ -1,9 +1,7 @@
 name: Publish to NuGet
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   publish:
@@ -20,9 +18,6 @@ jobs:
 
       - name: Build project
         run: dotnet build ./Rico.ValueObjects/*.csproj --configuration Release
-
-      - name: List project files for debugging
-        run: ls -la ./Rico.ValueObjects
 
       - name: Pack NuGet package
         run: dotnet pack ./Rico.ValueObjects/*.csproj --configuration Release -o ./nupkgs
