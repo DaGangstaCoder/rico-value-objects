@@ -1,6 +1,6 @@
 # DaGangstaCoder.Rico.ValueObjects
 
-![DaGangstaCoder.Rico.ValueObjects Logo](logo-thumbnail.png)
+<img src="logo-thumbnail.png" alt="DaGangstaCoder.Rico.ValueObjects Logo" width="512" />
 
 `DaGangstaCoder.Rico.ValueObjects` provides a structured approach to handling value objects in C# applications, making it easy to encapsulate specific business rules and constraints within your domain models.
 
