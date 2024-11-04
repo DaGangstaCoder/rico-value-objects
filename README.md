@@ -67,7 +67,11 @@ public class AppDbContext : DbContext
     {
         foreach (var type in GetType().Assembly.GetTypes())
         {
-            configurationBuilder.ApplyValueObjectConvention(type, o => o.RequirePrivateConstructor());
+            configurationBuilder.ApplyValueObjectConvention(type, o =>
+            {
+                o.RequirePrivateConstructor();
+                o.RequireSealedType();
+            });
         }
     }
 }

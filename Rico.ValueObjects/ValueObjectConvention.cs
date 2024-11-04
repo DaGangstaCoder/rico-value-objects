@@ -17,6 +17,12 @@ public static class ValueObjectConvention
         var options = new ValueObjectConventionOptions();
         
         configureOptions?.Invoke(options);
+
+        if (options.IsSealedTypeRequired && !type.IsSealed)
+        {
+            throw new InvalidOperationException(
+                $"The value object of type '{type.FullName}' is required to be sealed.");
+        }
         
         var baseType = type.BaseType;
         
@@ -38,13 +44,13 @@ public static class ValueObjectConvention
         if (parameterlessConstructor is null)
         {
             throw new InvalidOperationException(
-                $"A parameterless constructor is required for value object of type {type.FullName}.");
+                $"A parameterless constructor is required for value object of type '{type.FullName}'.");
         }
         
         if (options.IsPrivateConstructorRequired && !parameterlessConstructor.IsPrivate)
         {
             throw new InvalidOperationException(
-                $"A private parameterless constructor is required for value object of type {type.FullName}.");
+                $"A private parameterless constructor is required for value object of type '{type.FullName}'.");
         }
         
         var valueObject = parameterlessConstructor.Invoke([]);
