@@ -5,13 +5,19 @@ namespace Rico.ValueObjects;
 
 public static class ValueObjectConvention
 {
-    public static void ApplyValueObjectConvention(this ModelConfigurationBuilder configurationBuilder, Type type)
+    public static void ApplyValueObjectConvention(this ModelConfigurationBuilder configurationBuilder,
+        Type type,
+        Action<ValueObjectConventionOptions>? configureOptions = null)
     {
         if (!IsAssignableToGenericType(type, typeof(ValueObject<>)))
         {
             return;
         }
 
+        var options = new ValueObjectConventionOptions();
+        
+        configureOptions?.Invoke(options);
+        
         var baseType = type.BaseType;
         
         if (!baseType!.IsGenericType)
@@ -27,8 +33,22 @@ public static class ValueObjectConvention
 
         propertyBuilder.HaveConversion(converterType);
 
-        var valueObject = Activator.CreateInstance(type, nonPublic: true);
-
+        var constructors = type.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        var parameterlessConstructor = constructors.SingleOrDefault(c => c.GetParameters().Length == 0);
+        if (parameterlessConstructor is null)
+        {
+            throw new InvalidOperationException(
+                $"A parameterless constructor is required for value object of type {type.FullName}.");
+        }
+        
+        if (options.IsPrivateConstructorRequired && !parameterlessConstructor.IsPrivate)
+        {
+            throw new InvalidOperationException(
+                $"A private parameterless constructor is required for value object of type {type.FullName}.");
+        }
+        
+        var valueObject = parameterlessConstructor.Invoke([]);
+        
         var length = type
             .GetProperty("Length",
                 BindingFlags.NonPublic |
@@ -100,8 +120,8 @@ public static class ValueObjectConvention
             {
                 return true;
             }
-            
-            baseType = baseType.BaseType!;
+
+            baseType = baseType.BaseType;
         }
         
         return false;

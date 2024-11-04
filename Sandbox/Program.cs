@@ -18,9 +18,9 @@ db.Database.EnsureCreated();
 
 db.Movies.Add(new Movie
 {
-    Price = new MoviePrice { Value = 9.99m },
-    Title = new MovieTitle { Value = "The Dark Knight" },
-    ReleaseDate = new MovieReleaseDate { Value = new DateOnly(2008, 09, 12) }
+    Price = MoviePrice.Of(9.99m),
+    Title = MovieTitle.Create("The Dark Knight"),
+    ReleaseDate = MovieReleaseDate.Create(new DateOnly(2008, 09, 12)),
 });
 
 await db.SaveChangesAsync();   

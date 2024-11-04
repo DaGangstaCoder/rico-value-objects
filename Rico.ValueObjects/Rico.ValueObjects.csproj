@@ -10,7 +10,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <PackageId>DaGangstaCoder.Rico.ValueObjects</PackageId>
-    <Version>0.0.3</Version>
+    <Version>0.0.4</Version>
     <Authors>Georgi Kirilov</Authors>
     <Description>A library that simplifies creating and managing value objects.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -22,11 +22,15 @@
   <ItemGroup>
     <None Include="../README.md" Pack="true" PackagePath="/" />
   </ItemGroup>
-
+  
   <ItemGroup>
     <None Include="../icon.png" Pack="true" PackagePath="/" />
   </ItemGroup>
-
+  
+  <ItemGroup>
+    <None Include="../logo-thumbnail.png" Pack="true" PackagePath="/" />
+  </ItemGroup>
+  
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.10" />
   </ItemGroup>
