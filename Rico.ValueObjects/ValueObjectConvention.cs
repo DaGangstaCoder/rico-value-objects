@@ -9,121 +9,92 @@ public static class ValueObjectConvention
         Type type,
         ValueObjectConventionOptions? options = null)
     {
-        if (!IsAssignableToGenericType(type, typeof(ValueObject<>)))
+        if (!GenericTypeChecker.IsAssignableToGenericType(type, typeof(ValueObject<>)))
         {
             return;
         }
 
-        if (options is not null && options.IsSealedTypeRequired && !type.IsSealed)
+        var propertyConventionBuilder = CreatePropertyBuilder(type, configurationBuilder);
+
+        ApplyValueObjectConvention(propertyConventionBuilder, type, options);
+    }
+
+    internal static void ApplyValueObjectConvention(
+        PropertiesConfigurationBuilderWrapper propertyConventionBuilder,
+        Type type,
+        ValueObjectConventionOptions? options = null)
+    {
+        var parameterlessConstructor = type.GetParameterlessConstructor();
+
+        ValidateConventionOptions(type, parameterlessConstructor, options);
+
+        var valueObject = parameterlessConstructor.Invoke([]);
+
+        ConfigureLength(type, valueObject, propertyConventionBuilder);
+
+        ConfigureUnicode(type, valueObject, propertyConventionBuilder);
+
+        ConfigurePrecision(type, valueObject, propertyConventionBuilder);
+    }
+
+    internal static void ValidateConventionOptions(Type type, ConstructorInfo constructor, ValueObjectConventionOptions? options)
+    {
+        if (options is null)
+        {
+            return;
+        }
+
+        if (options.IsSealedTypeRequired && !type.IsSealed)
         {
             throw new InvalidOperationException(
                 $"The value object of type '{type.FullName}' is required to be sealed.");
         }
-        
-        var baseType = type.BaseType;
-        
-        if (!baseType!.IsGenericType)
-        {
-            baseType = baseType.BaseType;
-        }
-        
-        var genericArguments = baseType!.GetGenericArguments();
-        var genericTypeArgument = genericArguments[0];
 
-        var propertyBuilder = configurationBuilder.Properties(type);
-        var converterType = typeof(ValueObjectValueConverter<,>).MakeGenericType([type, genericTypeArgument]);
-
-        propertyBuilder.HaveConversion(converterType);
-
-        var constructors = type.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-
-        var parameterlessConstructor = constructors.SingleOrDefault(c => c.GetParameters().Length == 0) ??
-            throw new InvalidOperationException(
-                $"A parameterless constructor is required for value object of type '{type.FullName}'.");
-
-        if (options is not null && options.IsPrivateConstructorRequired && !parameterlessConstructor.IsPrivate)
+        if (options.IsPrivateConstructorRequired && !constructor.IsPrivate)
         {
             throw new InvalidOperationException(
                 $"A private parameterless constructor is required for value object of type '{type.FullName}'.");
         }
-        
-        var valueObject = parameterlessConstructor.Invoke([]);
-        
-        var length = type
-            .GetProperty("Length",
-                BindingFlags.NonPublic |
-                BindingFlags.Instance |
-                BindingFlags.FlattenHierarchy)!
-            .GetValue(valueObject)
-            as Length;
-
-        if (length!.Value != Length.None.Value)
-        {
-            propertyBuilder.HaveMaxLength(length.Value);
-        }
-
-        if (length.IsExact)
-        {
-            propertyBuilder.AreFixedLength();
-        }
-
-        var unicode = type
-            .GetProperty("Unicode",
-                BindingFlags.NonPublic |
-                BindingFlags.Instance |
-                BindingFlags.FlattenHierarchy)!
-            .GetValue(valueObject)
-            as Unicode;
-
-        if (unicode!.IsAllowed)
-        {
-            propertyBuilder.AreUnicode();
-        }
-
-        var precision = type
-            .GetProperty("Precision",
-                BindingFlags.NonPublic |
-                BindingFlags.Instance |
-                BindingFlags.FlattenHierarchy)!
-            .GetValue(valueObject)
-            as Precision;
-
-        if (precision != Precision.None)
-        {
-            propertyBuilder.HavePrecision(precision!.PrecisionValue, precision.Scale);
-        }
     }
-    
-    private static bool IsAssignableToGenericType(Type givenType, Type genericType)
+
+    private static PropertiesConfigurationBuilderWrapper CreatePropertyBuilder(Type type,
+        ModelConfigurationBuilder configurationBuilder)
     {
-        if (genericType.IsAssignableFrom(givenType))
-        {
-            return true;
-        }
+        var genericArguments = type.BaseType!.GetGenericArguments();
+        var genericTypeArgument = genericArguments[0];
 
-        if (!genericType.IsGenericTypeDefinition)
-        {
-            return false;
-            
-        }
+        var converterType = typeof(ValueObjectValueConverter<,>).MakeGenericType([type, genericTypeArgument]);
 
-        if (givenType.GetInterfaces().Any(it => it.IsGenericType && it.GetGenericTypeDefinition() == genericType))
-        {
-            return true;
-        }
+        var propertyBuilder = configurationBuilder.Properties(type);
+        propertyBuilder.HaveConversion(converterType);
 
-        var baseType = givenType.BaseType;
-        
-        while (baseType is not null)
-        {
-            if (baseType.IsGenericType && baseType.GetGenericTypeDefinition() == genericType)
-            {
-                return true;
-            }
+        return new(propertyBuilder);
+    }
 
-            baseType = baseType.BaseType;
-        }
-        
-        return false;
+    private static void ConfigureLength(Type type, object valueObject, PropertiesConfigurationBuilderWrapper conventionBuilder)
+    {
+        const string LengthPropertyName = nameof(ValueObject<int>.Length);
+
+        var length = type.GetPropertyValueOrThrow<Length>(LengthPropertyName, valueObject);
+
+        conventionBuilder.SetLength(length);
+    }
+
+    private static void ConfigureUnicode(Type type, object valueObject, PropertiesConfigurationBuilderWrapper propertyBuilder)
+    {
+        const string UnicodePropertyName = nameof(ValueObject<int>.Unicode);
+
+        var unicode = type.GetPropertyValueOrThrow<Unicode>(UnicodePropertyName, valueObject);
+
+        propertyBuilder.SetUnicode(unicode);
+    }
+
+    private static void ConfigurePrecision(Type type, object valueObject, PropertiesConfigurationBuilderWrapper propertyBuilder)
+    {
+        const string PrecisionPropertyName = nameof(ValueObject<int>.Precision);
+
+        var precision = type.GetPropertyValueOrThrow<Precision>(PrecisionPropertyName, valueObject);
+
+        propertyBuilder.SetPrecision(precision);
     }
 }

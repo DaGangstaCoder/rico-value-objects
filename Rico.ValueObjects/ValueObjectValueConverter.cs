@@ -13,7 +13,8 @@ public sealed class ValueObjectValueConverter<TModel, TValue>() : ValueConverter
         var model = Activator.CreateInstance(typeof(TModel), nonPublic: true) as TModel ??
                     throw new ArgumentNullException(nameof(value));
         
-        typeof(TModel).GetProperty("Value")!.SetValue(model, value);
+        typeof(TModel).GetProperty(nameof(ValueObject<int>.Value))!.SetValue(model, value);
+
         return model;
     }
 }
