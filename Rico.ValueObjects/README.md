@@ -63,13 +63,14 @@ public class AppDbContext : DbContext
     
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
+        var valueObjectOptions = new ValueObjectConventionOptions.Builder()
+            .RequirePrivateConstructor()
+            .RequireSealedType()
+            .Options;
+
         foreach (var type in GetType().Assembly.GetTypes())
         {
-            configurationBuilder.ApplyValueObjectConvention(type, o =>
-            {
-                o.RequirePrivateConstructor();
-                o.RequireSealedType();
-            });
+            configurationBuilder.ApplyValueObjectConvention(type, valueObjectOptions);
         }
     }
 }
