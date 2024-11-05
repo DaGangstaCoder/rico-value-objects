@@ -4,7 +4,7 @@
 
 `DaGangstaCoder.Rico.ValueObjects` provides a structured approach to handling value objects in C# applications, making it easy to encapsulate specific business rules and constraints within your domain models.
 
-## Getting Started with Value Objects
+## Getting Started
 
 ### Step 1: Define an Entity Class
 
