@@ -1,8 +1,8 @@
-name: Pack and Publish
+name: Build and Test
 
 on:
   push:
-    branches:
+    branches-ignore:
       - main
 
 jobs:
@@ -26,9 +26,3 @@ jobs:
 
       - name: Test
         run: dotnet test ./UnitTests/*.csproj --configuration Release --no-restore --no-build
-
-      - name: Pack
-        run: dotnet pack ./Rico.ValueObjects/*.csproj --configuration Release -o ./nupkgs
-
-      - name: Publish
-        run: dotnet nuget push ./nupkgs/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
