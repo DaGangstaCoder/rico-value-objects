@@ -10,7 +10,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <PackageId>DaGangstaCoder.Rico.ValueObjects</PackageId>
-    <Version>0.0.6</Version>
+    <Version>0.0.7</Version>
     <Authors>Georgi Kirilov</Authors>
     <Description>A library that simplifies creating and managing value objects.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
