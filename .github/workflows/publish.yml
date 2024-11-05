@@ -16,8 +16,14 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Build project
-        run: dotnet build ./Rico.ValueObjects/*.csproj --configuration Release
+      - name: Restore
+        run: dotnet restore ./Rico.ValueObjects.sln
+
+      - name: Build
+        run: dotnet build ./Rico.ValueObjects.sln --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test ./UnitTests/*.csproj --configuration Release --no-restore --no-build
 
       - name: Pack NuGet package
         run: dotnet pack ./Rico.ValueObjects/*.csproj --configuration Release -o ./nupkgs
