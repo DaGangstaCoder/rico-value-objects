@@ -7,18 +7,14 @@ public static class ValueObjectConvention
 {
     public static void ApplyValueObjectConvention(this ModelConfigurationBuilder configurationBuilder,
         Type type,
-        Action<ValueObjectConventionOptions>? configureOptions = null)
+        ValueObjectConventionOptions? options = null)
     {
         if (!IsAssignableToGenericType(type, typeof(ValueObject<>)))
         {
             return;
         }
 
-        var options = new ValueObjectConventionOptions();
-        
-        configureOptions?.Invoke(options);
-
-        if (options.IsSealedTypeRequired && !type.IsSealed)
+        if (options is not null && options.IsSealedTypeRequired && !type.IsSealed)
         {
             throw new InvalidOperationException(
                 $"The value object of type '{type.FullName}' is required to be sealed.");
@@ -40,14 +36,12 @@ public static class ValueObjectConvention
         propertyBuilder.HaveConversion(converterType);
 
         var constructors = type.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-        var parameterlessConstructor = constructors.SingleOrDefault(c => c.GetParameters().Length == 0);
-        if (parameterlessConstructor is null)
-        {
+
+        var parameterlessConstructor = constructors.SingleOrDefault(c => c.GetParameters().Length == 0) ??
             throw new InvalidOperationException(
                 $"A parameterless constructor is required for value object of type '{type.FullName}'.");
-        }
-        
-        if (options.IsPrivateConstructorRequired && !parameterlessConstructor.IsPrivate)
+
+        if (options is not null && options.IsPrivateConstructorRequired && !parameterlessConstructor.IsPrivate)
         {
             throw new InvalidOperationException(
                 $"A private parameterless constructor is required for value object of type '{type.FullName}'.");

@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<SandboxDbContext>(options =>
     options.UseSqlServer(
-        "Server=localhost,1434; Database=mozart; User Id=sa; Password=Qwerty1@; TrustServerCertificate=True;"));
+        "Server=localhost,1434; Database=RicoValueObjects; User Id=sa; Password=Qwerty1@; TrustServerCertificate=True;"));
 
 var app = builder.Build();
 
@@ -23,6 +23,6 @@ db.Movies.Add(new Movie
     ReleaseDate = MovieReleaseDate.Create(new DateOnly(2008, 09, 12)),
 });
 
-await db.SaveChangesAsync();   
+await db.SaveChangesAsync();
 
 app.Run();

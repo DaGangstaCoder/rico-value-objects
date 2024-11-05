@@ -2,21 +2,26 @@ namespace Rico.ValueObjects;
 
 public sealed class ValueObjectConventionOptions
 {
-    internal bool IsPrivateConstructorRequired { get; private set; }
-    
-    internal bool IsSealedTypeRequired { get; private set; }
-    
     internal ValueObjectConventionOptions() { }
-    
-    public ValueObjectConventionOptions RequirePrivateConstructor()
+
+    internal bool IsPrivateConstructorRequired { get; private set; }
+
+    internal bool IsSealedTypeRequired { get; private set; }
+
+    public sealed class Builder
     {
-        IsPrivateConstructorRequired = true;
-        return this;
-    }
-    
-    public ValueObjectConventionOptions RequireSealedType()
-    {
-        IsSealedTypeRequired = true;
-        return this;
+        public ValueObjectConventionOptions Options { get; } = new();
+
+        public Builder RequirePrivateConstructor(bool required = true)
+        {
+            Options.IsPrivateConstructorRequired = required;
+            return this;
+        }
+
+        public Builder RequireSealedType(bool required = true)
+        {
+            Options.IsSealedTypeRequired = required;
+            return this;
+        }
     }
 }
