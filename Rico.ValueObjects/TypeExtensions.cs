@@ -4,13 +4,11 @@ namespace Rico.ValueObjects;
 
 internal static class TypeExtensions
 {
-    private static readonly BindingFlags PropertyBindingFlags = BindingFlags.NonPublic |
-        BindingFlags.Instance |
-        BindingFlags.FlattenHierarchy;
+    private const BindingFlags PropertyBindingFlags =
+        BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy;
 
-    private static readonly BindingFlags ConstructorBindingFlags = BindingFlags.Instance |
-        BindingFlags.Public |
-        BindingFlags.NonPublic;
+    private const BindingFlags ConstructorBindingFlags =
+        BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
     internal static T GetPropertyValueOrThrow<T>(this Type type, string propertyName, object valueObject)
         where T : class

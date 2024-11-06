@@ -2,7 +2,7 @@ namespace Rico.ValueObjects;
 
 public sealed class ValueObjectConventionOptions
 {
-    internal ValueObjectConventionOptions() { }
+    private ValueObjectConventionOptions() { }
 
     internal bool IsPrivateConstructorRequired { get; private set; }
 
