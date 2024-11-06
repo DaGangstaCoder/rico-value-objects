@@ -18,6 +18,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sandbox", "Sandbox\Sandbox.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{C93FDF59-11FD-4F7C-A3FA-1F38FC64EAFE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{DD5D8912-9B89-425A-8D20-AF4BE4D34D89}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{79F8560B-A4E8-4917-8B84-E029EF31ADF6}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build.yml = .github\workflows\build.yml
+		.github\workflows\publish.yml = .github\workflows\publish.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +50,9 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {23FAF55A-EC9A-44AB-94E6-6EA1DC099B59}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DD5D8912-9B89-425A-8D20-AF4BE4D34D89} = {21D17CA0-4A8E-454D-BCB8-E29BEC156D12}
+		{79F8560B-A4E8-4917-8B84-E029EF31ADF6} = {DD5D8912-9B89-425A-8D20-AF4BE4D34D89}
 	EndGlobalSection
 EndGlobal

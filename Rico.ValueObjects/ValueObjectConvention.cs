@@ -37,7 +37,8 @@ public static class ValueObjectConvention
         ConfigurePrecision(type, valueObject, propertyConventionBuilder);
     }
 
-    internal static void ValidateConventionOptions(Type type, ConstructorInfo constructor, ValueObjectConventionOptions? options)
+    internal static void ValidateConventionOptions(Type type, ConstructorInfo constructor,
+        ValueObjectConventionOptions? options)
     {
         if (options is null)
         {
@@ -68,32 +69,35 @@ public static class ValueObjectConvention
         var propertyBuilder = configurationBuilder.Properties(type);
         propertyBuilder.HaveConversion(converterType);
 
-        return new(propertyBuilder);
+        return new PropertiesConfigurationBuilderWrapper(propertyBuilder);
     }
 
-    private static void ConfigureLength(Type type, object valueObject, PropertiesConfigurationBuilderWrapper conventionBuilder)
+    private static void ConfigureLength(Type type, object valueObject,
+        PropertiesConfigurationBuilderWrapper conventionBuilder)
     {
-        const string LengthPropertyName = nameof(ValueObject<int>.Length);
+        const string lengthPropertyName = nameof(ValueObject<int>.Length);
 
-        var length = type.GetPropertyValueOrThrow<Length>(LengthPropertyName, valueObject);
+        var length = type.GetPropertyValueOrThrow<Length>(lengthPropertyName, valueObject);
 
         conventionBuilder.SetLength(length);
     }
 
-    private static void ConfigureUnicode(Type type, object valueObject, PropertiesConfigurationBuilderWrapper propertyBuilder)
+    private static void ConfigureUnicode(Type type, object valueObject,
+        PropertiesConfigurationBuilderWrapper propertyBuilder)
     {
-        const string UnicodePropertyName = nameof(ValueObject<int>.Unicode);
+        const string unicodePropertyName = nameof(ValueObject<int>.Unicode);
 
-        var unicode = type.GetPropertyValueOrThrow<Unicode>(UnicodePropertyName, valueObject);
+        var unicode = type.GetPropertyValueOrThrow<Unicode>(unicodePropertyName, valueObject);
 
         propertyBuilder.SetUnicode(unicode);
     }
 
-    private static void ConfigurePrecision(Type type, object valueObject, PropertiesConfigurationBuilderWrapper propertyBuilder)
+    private static void ConfigurePrecision(Type type, object valueObject,
+        PropertiesConfigurationBuilderWrapper propertyBuilder)
     {
-        const string PrecisionPropertyName = nameof(ValueObject<int>.Precision);
+        const string precisionPropertyName = nameof(ValueObject<int>.Precision);
 
-        var precision = type.GetPropertyValueOrThrow<Precision>(PrecisionPropertyName, valueObject);
+        var precision = type.GetPropertyValueOrThrow<Precision>(precisionPropertyName, valueObject);
 
         propertyBuilder.SetPrecision(precision);
     }

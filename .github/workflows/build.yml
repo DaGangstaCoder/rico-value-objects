@@ -1,12 +1,13 @@
 name: Build and Test
 
 on:
-  push:
-    branches-ignore:
+  pull_request:
+    branches:
       - main
+    types: [opened, synchronize, reopened]
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
 
     steps:
