@@ -10,11 +10,11 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <PackageId>DaGangstaCoder.Rico.ValueObjects</PackageId>
-    <Version>0.0.8</Version>
+    <Version>0.0.9</Version>
     <Authors>Georgi Kirilov</Authors>
     <Description>A library that simplifies creating and managing value objects.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/georgy-kirilov/rico-value-objects</RepositoryUrl>
+    <RepositoryUrl>https://github.com/DaGangstaCoder/rico-value-objects</RepositoryUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
