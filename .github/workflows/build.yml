@@ -7,7 +7,7 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
 
     steps:
